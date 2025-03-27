@@ -18,6 +18,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.http import HttpResponse
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
@@ -31,7 +32,13 @@ router.register(r"menu-items", MenuItemViewSet)
 router.register(r"users", UserViewSet)
 router.register(r"favorites", FavoriteViewSet, basename="favorite")
 
+
+def hello_world(request):
+    return HttpResponse("Hello, World!")
+
+
 urlpatterns = [
+    path("", hello_world, name="home"),
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
     path("api-auth/", include("rest_framework.urls")),
