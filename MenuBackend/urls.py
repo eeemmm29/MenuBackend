@@ -21,8 +21,9 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from authentication.views import UserViewSet
 from favorites.views import FavoriteViewSet
-from menu.views import CategoryViewSet, MenuItemViewSet, UserViewSet
+from menu.views import CategoryViewSet, MenuItemViewSet
 
 router = DefaultRouter()
 router.register(r"categories", CategoryViewSet)
