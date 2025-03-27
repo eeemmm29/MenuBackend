@@ -5,9 +5,11 @@ from .models import UserProfile
 
 
 class UserSerializer(serializers.ModelSerializer):
+    is_admin = serializers.BooleanField(source="is_staff", read_only=True)
+
     class Meta:
         model = User
-        fields = ("id", "username", "email", "password")
+        fields = ("id", "username", "email", "password", "is_admin")
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
