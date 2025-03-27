@@ -1,7 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import User
-
-# Create your models here.
+from django.core.validators import MinValueValidator
+from django.db import models
 
 
 class Category(models.Model):
@@ -15,9 +14,11 @@ class Category(models.Model):
 
 
 class MenuItem(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, db_index=True)
     description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(
+        max_digits=6, decimal_places=2, validators=[MinValueValidator(0)]
+    )
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="menu_images/", null=True, blank=True)
     is_available = models.BooleanField(default=True)

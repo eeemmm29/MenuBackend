@@ -21,12 +21,14 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from favorites.views import FavoriteViewSet
 from menu.views import CategoryViewSet, MenuItemViewSet, UserViewSet
 
 router = DefaultRouter()
 router.register(r"categories", CategoryViewSet)
 router.register(r"menu-items", MenuItemViewSet)
 router.register(r"users", UserViewSet)
+router.register(r"favorites", FavoriteViewSet, basename="favorite")
 
 urlpatterns = [
     path("admin/", admin.site.urls),

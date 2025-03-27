@@ -23,33 +23,11 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class MenuItemViewSet(viewsets.ModelViewSet):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
         if self.action in ["create", "update", "partial_update", "destroy"]:
             return [permissions.IsAdminUser()]
-        return [permissions.AllowAny()]
-
-    @action(detail=True, methods=["post"])
-    def toggle_favorite(self, request, pk=None):
-        menu_item = self.get_object()
-        user = request.user
-
-        if not user.is_authenticated:
-            return Response(
-                {"error": "Authentication required"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-
-        favorite, created = FavoriteDish.objects.get_or_create(
-            user=user, menu_item=menu_item
-        )
-
-        if not created:
-            favorite.delete()
-            return Response({"status": "removed from favorites"})
-
-        return Response({"status": "added to favorites"})
+        return [permissions.IsAuthenticatedOrReadOnly()]
 
 
 class UserViewSet(viewsets.ModelViewSet):
