@@ -1,5 +1,7 @@
 django
 djangorestframework
+djangorestframework-camel-case
+djangorestframework_simplejwt
 pillow
 django-cors-headers
 python-dotenv
