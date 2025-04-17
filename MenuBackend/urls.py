@@ -39,7 +39,7 @@ def hello_world(request):
 
 urlpatterns = [
     path("", hello_world, name="home"),
-    path("api/auth/", include("authentication.urls")),
+    path("auth/", include("authentication.urls")),
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
     # path("api-auth/", include("rest_framework.urls")),
