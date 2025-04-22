@@ -33,7 +33,7 @@ REM     exit /b 1
 REM )
 
 echo Building the Docker image '%IMAGE_NAME%'...
-docker build -t %IMAGE_NAME% .
+docker build --target=development -t %IMAGE_NAME% .
 IF ERRORLEVEL 1 (
     echo Docker build failed. Exiting.
     pause
