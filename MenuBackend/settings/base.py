@@ -22,20 +22,17 @@ load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR points to the 'MenuBackend' directory containing manage.py
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# Default to a random key if not set in environment, primarily for base settings validation.
+# Production should strictly require SECRET_KEY in the environment.
 SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DJANGO_DEBUG") == "True"
-
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
-
 
 # Application definition
 
@@ -130,13 +127,7 @@ APPEND_SLASH = False
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.getenv("DB_NAME", BASE_DIR / "db.sqlite3"),
-    }
-}
+# Specific database configuration moved to dev.py and prod.py
 
 
 # Password validation
@@ -174,7 +165,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# STATIC_ROOT is environment-specific, moved to prod.py
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -188,6 +179,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Optional: Allow credentials (cookies, authorization headers)
 CORS_ALLOW_CREDENTIALS = True
+# CORS origin settings moved to dev.py and prod.py
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
@@ -195,7 +187,10 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True,
-    "SIGNING_KEY": "complexsigningkey",  # TODO: generate a key and replace me
+    # Ensure SIGNING_KEY is set securely in production environment
+    "SIGNING_KEY": os.getenv(
+        "JWT_SIGNING_KEY", "complexsigningkey"
+    ),  # Default for dev if not set
     "ALGORITHM": "HS512",
 }
 
@@ -211,10 +206,6 @@ REST_AUTH = {
     "USER_DETAILS_SERIALIZER": "authentication.serializers.UserSerializer",
 }
 
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
-else:
-    CORS_ALLOWED_ORIGINS = [
-        "http://localhost",
-        "http://127.0.0.1",
-    ]
+# DEBUG and ALLOWED_HOSTS moved to dev.py and prod.py
+# Database settings moved to dev.py and prod.py
+# CORS settings moved to dev.py and prod.py
