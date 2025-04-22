@@ -11,28 +11,30 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import environ # Import environ
 from datetime import timedelta
 from pathlib import Path
 
-from django.core.management.utils import get_random_secret_key
-from dotenv import load_dotenv
+# Remove get_random_secret_key import as environ handles default generation if needed
+# from django.core.management.utils import get_random_secret_key
 
-# Load environment variables
-load_dotenv()
-
+# Initialize django-environ
+env = environ.Env(
+    # set casting, default value
+    DJANGO_DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR points to the 'MenuBackend' directory containing manage.py
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+# environ.Env.read_env(os.path.join(BASE_DIR, '.env')) # Reading .env moved to dev/prod
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# Default to a random key if not set in environment, primarily for base settings validation.
-# Production should strictly require SECRET_KEY in the environment.
-SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
+# Environ will raise ImproperlyConfigured if SECRET_KEY is not found in prod
+SECRET_KEY = env('SECRET_KEY')
 
 # Application definition
 
@@ -127,7 +129,7 @@ APPEND_SLASH = False
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-# Specific database configuration moved to dev.py and prod.py
+# Database configuration is now handled entirely in dev.py and prod.py using env()
 
 
 # Password validation
@@ -165,7 +167,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
-# STATIC_ROOT is environment-specific, moved to prod.py
+# STATIC_ROOT is environment-specific, defined in prod.py using env()
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -179,7 +181,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Optional: Allow credentials (cookies, authorization headers)
 CORS_ALLOW_CREDENTIALS = True
-# CORS origin settings moved to dev.py and prod.py
+# CORS origin settings moved to dev.py and prod.py using env()
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
@@ -187,10 +189,8 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True,
-    # Ensure SIGNING_KEY is set securely in production environment
-    "SIGNING_KEY": os.getenv(
-        "JWT_SIGNING_KEY", "complexsigningkey"
-    ),  # Default for dev if not set
+    # Environ will raise ImproperlyConfigured if JWT_SIGNING_KEY is not found in prod
+    "SIGNING_KEY": env('JWT_SIGNING_KEY'),
     "ALGORITHM": "HS512",
 }
 
@@ -206,6 +206,6 @@ REST_AUTH = {
     "USER_DETAILS_SERIALIZER": "authentication.serializers.UserSerializer",
 }
 
-# DEBUG and ALLOWED_HOSTS moved to dev.py and prod.py
-# Database settings moved to dev.py and prod.py
-# CORS settings moved to dev.py and prod.py
+# DEBUG and ALLOWED_HOSTS are handled in dev.py/prod.py using env()
+# Database settings are handled in dev.py/prod.py using env()
+# CORS settings are handled in dev.py/prod.py using env()

@@ -45,9 +45,9 @@ echo Docker image built successfully.
 echo Running the Docker container '%CONTAINER_NAME%'...
 REM Runs in detached mode (-d), maps host port to container port (-p),
 REM mounts the current directory to /app inside the container (-v),
-REM uses the .env file for environment variables (--env-file),
+REM uses the .env.dev file for environment variables (--env-file),
 REM and names the container (--name).
-docker run --name %CONTAINER_NAME% --env-file .env -p %HOST_PORT%:%CONTAINER_PORT% -d -v "%CD%":/app %IMAGE_NAME%
+docker run --name %CONTAINER_NAME% --env-file .env.dev -p %HOST_PORT%:%CONTAINER_PORT% -d -v "%CD%":/app %IMAGE_NAME%
 IF ERRORLEVEL 1 (
     echo Failed to run the Docker container. Exiting.
     pause

@@ -1,23 +1,34 @@
-import os
-from .base import *
+import os # Keep os for path joining
+from .base import * # Import base settings including env
+
+# Take environment variables from .env.dev file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env.dev'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
+# Use env.bool to cast DJANGO_DEBUG to boolean, default to True for dev
+DEBUG = env.bool("DJANGO_DEBUG", default=True)
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+# Use env.list for ALLOWED_HOSTS, default to localhost for dev
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# Use env() for database settings, providing defaults for SQLite in dev
 DATABASES = {
-    "default": {
-        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.getenv("DB_NAME", BASE_DIR / "db.sqlite3"),
-    }
+    # Use env.db() which reads the DATABASE_URL environment variable
+    # Or configure individual parts if DATABASE_URL is not set
+    'default': env.db('DATABASE_URL', default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+    # Example for individual parts (if not using DATABASE_URL):
+    # "default": {
+    #     "ENGINE": env("DB_ENGINE", default="django.db.backends.sqlite3"),
+    #     "NAME": env("DB_NAME", default=BASE_DIR / "db.sqlite3"),
+    # }
 }
 
 # CORS settings for development
-CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins for local development
+CORS_ALLOW_ALL_ORIGINS = True # Keep allowing all for simplicity in dev
+# Alternatively, use env.list for specific dev origins:
+# CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=['http://localhost:3000', 'http://127.0.0.1:3000'])
 
 # Optional: Add development-specific apps like django-debug-toolbar
 # INSTALLED_APPS += ['debug_toolbar']
