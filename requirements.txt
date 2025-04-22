@@ -2,8 +2,10 @@ django
 django-allauth
 django-cors-headers
 django-filter
+dj-rest-auth
 djangorestframework
 djangorestframework-camel-case
 djangorestframework_simplejwt
 pillow
 python-dotenv
+requests

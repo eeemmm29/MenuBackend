@@ -33,5 +33,5 @@ RUN python manage.py migrate
 # Expose port
 EXPOSE 8000
 
-# Start the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "MenuBackend.wsgi:application"] 
+# Start the application using Django's development server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
