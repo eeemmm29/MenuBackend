@@ -209,6 +209,7 @@ REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_HTTPONLY": False,
     "JWT_AUTH_RETURN_EXPIRATION": True,
+    "USER_DETAILS_SERIALIZER": "authentication.serializers.UserSerializer",
 }
 
 if DEBUG:
