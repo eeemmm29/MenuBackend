@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
-import environ # Import environ
+import environ
 from datetime import timedelta
 from pathlib import Path
 
@@ -34,7 +34,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Environ will raise ImproperlyConfigured if SECRET_KEY is not found in prod
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env("SECRET_KEY")
 
 # Application definition
 
@@ -190,7 +190,7 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True,
     # Environ will raise ImproperlyConfigured if JWT_SIGNING_KEY is not found in prod
-    "SIGNING_KEY": env('JWT_SIGNING_KEY'),
+    "SIGNING_KEY": env("JWT_SIGNING_KEY"),
     "ALGORITHM": "HS512",
 }
 

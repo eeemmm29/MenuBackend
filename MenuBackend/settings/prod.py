@@ -1,17 +1,22 @@
-import os # Keep os for path joining
-from .base import * # Import base settings including env
+import os
+import environ
+from pathlib import Path
 
-# Take environment variables from .env.prod file
-# Note: In production, prefer injecting variables directly into the environment.
-# Reading from .env.prod is a fallback or for specific deployment strategies.
-environ.Env.read_env(os.path.join(BASE_DIR, '.env.prod'))
+# Define BASE_DIR locally first
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+# Create a temporary Env instance and read the .env.prod file
+# This loads variables into os.environ
+environ.Env.read_env(os.path.join(BASE_DIR, ".env.prod"))
+
+# Now import base settings. The env instance in base.py will read from os.environ
+from .base import *
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY is already read in base.py using env('SECRET_KEY')
-# Environ raises ImproperlyConfigured if it's missing, so no need for manual check.
+# SECRET_KEY is read in base.py
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG is read from env using env.bool('DJANGO_DEBUG', default=False)
+# Use env.bool from the base settings' env instance
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
 
 # Load allowed hosts from environment variable, required for production
@@ -23,9 +28,7 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS")
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 # Configure database for production using DATABASE_URL environment variable
 # Environ raises ImproperlyConfigured if DATABASE_URL is missing.
-DATABASES = {
-    'default': env.db('DATABASE_URL')
-}
+DATABASES = {"default": env.db("DATABASE_URL")}
 # Remove manual checks for individual DB variables as env.db handles DATABASE_URL
 
 # Static files (CSS, JavaScript, Images)
