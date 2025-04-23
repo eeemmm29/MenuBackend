@@ -11,6 +11,8 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'MenuBackend.settings')
+# Default to development settings if not specified
+# Production environments should set DJANGO_SETTINGS_MODULE explicitly
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MenuBackend.settings.dev")
 
 application = get_asgi_application()

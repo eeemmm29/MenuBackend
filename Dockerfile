@@ -1,5 +1,6 @@
+# Base stage
 # Use official Python runtime as the base image
-FROM python:3.13-slim
+FROM python:3.13-slim AS base
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -21,17 +22,25 @@ RUN apt-get update \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
-COPY . .
-
-# Collect static files
-RUN python manage.py collectstatic --noinput
-
-# Run migrations
-RUN python manage.py migrate
-
 # Expose port
 EXPOSE 8000
 
+# Development stage
+FROM base AS development
+ENV DJANGO_SETTINGS_MODULE=MenuBackend.settings.dev
+# Copy project files
+COPY . .
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+# Production stage
+
+# Run migrations
+RUN python manage.py migrate
+FROM base AS production
+ENV DJANGO_SETTINGS_MODULE=MenuBackend.settings.prod
+# Copy project files
+COPY . .
+# Collect static files
+RUN python manage.py collectstatic --noinput
 # Start the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "MenuBackend.wsgi:application"] 
+CMD ["gunicorn", "MenuBackend.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]
