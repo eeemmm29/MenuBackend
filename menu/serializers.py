@@ -15,6 +15,8 @@ class MenuItemSerializer(serializers.ModelSerializer):
         max_digits=10, decimal_places=2, coerce_to_string=False
     )
 
+    category_name = serializers.CharField(source="category.name", read_only=True)
+
     class Meta:
         model = MenuItem
         fields = "__all__"
