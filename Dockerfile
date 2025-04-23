@@ -43,4 +43,4 @@ COPY . .
 # Collect static files
 RUN python manage.py collectstatic --noinput
 # Start the application
-CMD ["gunicorn", "MenuBackend.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "MenuBackend.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]

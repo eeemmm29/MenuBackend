@@ -3,10 +3,13 @@ django-allauth
 django-cors-headers
 django-environ
 django-filter
-dj-rest-auth
 djangorestframework
 djangorestframework-camel-case
 djangorestframework_simplejwt
+dj-rest-auth
+gunicorn
 pillow
 psycopg2-binary
 requests
+uvicorn
+whitenoise[brotli]
