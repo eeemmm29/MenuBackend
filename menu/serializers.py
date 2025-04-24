@@ -16,7 +16,15 @@ class MenuItemSerializer(serializers.ModelSerializer):
     )
 
     category_name = serializers.CharField(source="category.name", read_only=True)
+    is_favorite = serializers.SerializerMethodField()
 
     class Meta:
         model = MenuItem
         fields = "__all__"
+
+    def get_is_favorite(self, obj):
+        """Check if the menu item is favorited by the current user."""
+        user = self.context["request"].user
+        if user.is_authenticated:
+            return user.favorites.filter(menu_item=obj).exists()
+        return False
