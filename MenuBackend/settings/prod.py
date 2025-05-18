@@ -44,6 +44,11 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 # Remove manual checks as environ handles missing variables.
 
+# CSRF settings for production
+# Add the origin(s) of your deployed frontend application
+# Use env.list, environ raises ImproperlyConfigured if missing and no default.
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
+
 # Ensure JWT Signing Key is set in production
 # JWT_SIGNING_KEY is already read in base.py using env('JWT_SIGNING_KEY')
 # Environ raises ImproperlyConfigured if it's missing, so no need for manual check.

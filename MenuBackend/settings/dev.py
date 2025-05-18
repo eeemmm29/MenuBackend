@@ -38,6 +38,12 @@ CORS_ALLOW_ALL_ORIGINS = True  # Keep allowing all for simplicity in dev
 # Alternatively, use env.list for specific dev origins:
 # CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=['http://localhost:3000', 'http://127.0.0.1:3000'])
 
+# CSRF settings for development
+# Add the origin of your frontend development server
+CSRF_TRUSTED_ORIGINS = env.list(
+    "CSRF_TRUSTED_ORIGINS", default=["http://localhost:3000", "http://127.0.0.1:3000"]
+)
+
 # Optional: Add development-specific apps like django-debug-toolbar
 # INSTALLED_APPS += ['debug_toolbar']
 # MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
