@@ -161,4 +161,6 @@ cython_debug/
 #.idea/
 
 # Media
+# Was used to upload all media files to a folder.
+# Cloudinary is now used, but keeping this just in case.
 media

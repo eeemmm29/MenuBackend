@@ -22,4 +22,7 @@ coverage.xml
 .pytest_cache/
 .mypy_cache/
 .docker/ 
+
+# Was used to upload all media files to a folder.
+# Cloudinary is now used, but keeping this just in case.
 media/

@@ -20,7 +20,7 @@ class MenuItem(models.Model):
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0)]
     )
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="menu_images/", null=True, blank=True)
+    image_url = models.URLField(max_length=500, null=True, blank=True)
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

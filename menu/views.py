@@ -25,3 +25,25 @@ class MenuItemViewSet(viewsets.ModelViewSet):
         if self.action in ["create", "update", "partial_update", "destroy"]:
             return [permissions.IsAdminUser()]
         return [permissions.IsAuthenticatedOrReadOnly()]
+
+    def perform_create(self, serializer):
+        request = self.request
+        image = request.FILES.get("image")
+        image_url = None
+        if image:
+            import cloudinary.uploader
+
+            result = cloudinary.uploader.upload(image)
+            image_url = result.get("secure_url")
+        serializer.save(image_url=image_url)
+
+    def perform_update(self, serializer):
+        request = self.request
+        image = request.FILES.get("image")
+        image_url = serializer.instance.image_url
+        if image:
+            import cloudinary.uploader
+
+            result = cloudinary.uploader.upload(image)
+            image_url = result.get("secure_url")
+        serializer.save(image_url=image_url)

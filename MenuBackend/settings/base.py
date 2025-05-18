@@ -14,6 +14,7 @@ import os
 import environ
 from datetime import timedelta
 from pathlib import Path
+import cloudinary
 
 # Remove get_random_secret_key import as environ handles default generation if needed
 # from django.core.management.utils import get_random_secret_key
@@ -22,6 +23,12 @@ from pathlib import Path
 env = environ.Env(
     # set casting, default value
     DJANGO_DEBUG=(bool, False)
+)
+
+cloudinary.config(
+    cloud_name=env("CLOUDINARY_CLOUD_NAME"),
+    api_key=env("CLOUDINARY_API_KEY"),
+    api_secret=env("CLOUDINARY_API_SECRET"),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -59,6 +66,7 @@ INSTALLED_APPS = [
     "authentication",
     "menu",
     "favorites",
+    "cloudinary",
 ]
 
 REST_FRAMEWORK = {
